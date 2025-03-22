@@ -1,8 +1,11 @@
 # login-frontend
 Vue.js 학습을 위한 레포지토리입니다.
 
-## Vue 3 + Vite
-
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+# 프로젝트 실행 방법 
+아래 명령어를 cmd에서 차례대로 실행해 주세요.
+```
+git clone https://github.com/happy6team/login-frontend.git   // 레포지토리 클론 받기
+cd login-frontend  //프로젝트 폴더로 이동
+npm install  //package.json 에 정의된 의존성들을 node_modules 폴더에 설치해주는 명령어
+npm run dev //프로젝트 실행
+```
