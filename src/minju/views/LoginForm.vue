@@ -1,40 +1,50 @@
-<script>
+<script setup>
 import "../PurpleTone.css";
+
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import axios from "axios";
 
-export default {
-  name: "LoginForm",
-  emits: ["changeView"],
-  setup(props, { emit }) {
-    // 로그인 데이터
-    const loginData = ref({
-      userId: "",
-      password: "",
-    });
+const router = useRouter();
 
-    const handleLogin = async () => {
-      try {
-        // API 호출 대신 콘솔에 출력 (실제 구현 시 API 호출로 변경 필요)
-        console.log("로그인 요청:", loginData.value);
+// 로그인 데이터
+const loginData = ref({
+  userId: "",
+  password: "",
+});
 
-        // 실제 API 호출 예시
-        // const response = await loginUser(loginData.value);
-        // if (response.success) {
-        //   // 로그인 성공 처리
-        // }
+const handleLogin = async () => {
+  const requestBody = {
+    userId: loginData.value.userId,
+    password: loginData.value.password,
+  };
 
-        alert("로그인 요청이 전송되었습니다.");
-      } catch (error) {
-        console.error("로그인 에러:", error);
-        alert("로그인 중 오류가 발생했습니다.");
+  try {
+    const response = await axios.post("/api/users/login", requestBody);
+
+    if (response.status == 200) {
+      if (response.data === true) {
+        //=== 인가 ==인가??
+        console.log("로그인 성공", response.data);
+        alert("로그인 성공 🥳🥳🥳");
+        router.push("/"); //홈으로 돌아가기
+      } else {
+        console.log("로그인 실패", response.data);
+        alert("로그인 실패 😭😭😭");
       }
-    };
+    }
+  } catch (error) {
+    console.error("로그인 실패: ", error.response?.data || error.message);
+    alert("서버 에러입니다.");
+  }
+};
 
-    return {
-      loginData,
-      handleLogin,
-    };
-  },
+const goSignup = () => {
+  router.push("/minju/signup");
+};
+
+const goFindPassword = () => {
+  router.push("/minju/password");
 };
 </script>
 
@@ -62,10 +72,8 @@ export default {
       <button class="btn-primary" @click="handleLogin">로그인</button>
     </div>
     <div class="form-links">
-      <a href="#" @click.prevent="$emit('changeView', 'signup')">회원가입</a>
-      <a href="#" @click.prevent="$emit('changeView', 'recovery')"
-        >비밀번호 찾기</a
-      >
+      <a href="#" @click="goSignup">회원가입</a>
+      <a href="#" @click="goFindPassword">비밀번호 찾기</a>
     </div>
   </div>
 </template>
