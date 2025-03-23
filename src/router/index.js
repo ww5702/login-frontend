@@ -3,7 +3,12 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import DaeunLogin from "../daeun/views/Login.vue";
 import JaeungLogin from "../jaeung/views/Login.vue";
-import SilLogin from "../sil/views/Login.vue";
+import JaeUngSingUpPage from '../jaeung/views/SignUpPage.vue';
+import JaeungHomePage from '../jaeung/views/HomePage.vue';
+
+import SilLogin from "../sil/views/StartMain.vue";
+import SilSignup from "../sil/views/Signup.vue";
+import SilHelloWorld from "../sil/views/HelloWorld.vue";
 import MinjuLogin from "../minju/views/LoginForm.vue";
 import MinjuSignup from "../minju/views/SignupForm.vue";
 import MinjuFindPassword from "../minju/views/PasswordRecoveryForm.vue";
@@ -18,9 +23,13 @@ const routes = [
 
   // 재웅오빠
   { path: "/jaeung", component: JaeungLogin },
+  { path: '/jaeung/signup', component: JaeUngSingUpPage },
+  { path: '/jaeung/home', component: JaeungHomePage },
 
   // 실언니
   { path: "/sil", component: SilLogin },
+  { path: "/sil/signup", component: SilSignup },
+  { path: "/sil/hello", component: SilHelloWorld },
 
   // 민주
   { path: "/minju", component: MinjuLogin },
