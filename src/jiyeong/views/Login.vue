@@ -1,5 +1,235 @@
 <template>
-  <div>
-    <h1>지영 home</h1>
+  <div class="container">
+    <!-- Bootstrap Icons CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <div class="login-container">
+      <div class="login-logo">
+        <img src="./logo.jpeg" alt="Logo">
+      </div>
+      <h3 class="text-center mb-4">로그인</h3>
+      
+      <div v-if="message" :class="'alert alert-' + (isError ? 'danger' : 'success')">
+        {{ message }}
+      </div>
+      
+      <form @submit.prevent="handleLogin">
+        <div class="form-group">
+          <label for="username" class="form-label">아이디</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="username" 
+            v-model="username" 
+            placeholder="아이디를 입력하세요"
+            :class="{ 'is-invalid': validationErrors.username }"
+            required
+          >
+          <div class="invalid-feedback" v-if="validationErrors.username">
+            {{ validationErrors.username }}
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="password" class="form-label">비밀번호</label>
+          <div class="input-group">
+            <input 
+              :type="showPassword ? 'text' : 'password'" 
+              class="form-control" 
+              id="password" 
+              v-model="password" 
+              placeholder="비밀번호를 입력하세요"
+              :class="{ 'is-invalid': validationErrors.password }"
+              required
+            >
+            <button 
+              class="btn btn-outline-secondary" 
+              type="button"
+              @click="showPassword = !showPassword"
+              title="{{ showPassword ? '비밀번호 숨기기' : '비밀번호 보기' }}"
+            >
+              <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+            </button>
+            <div class="invalid-feedback" v-if="validationErrors.password">
+              {{ validationErrors.password }}
+            </div>
+          </div>
+        </div>
+        
+        <div class="d-flex justify-content-between mb-3">
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="remember" v-model="rememberMe">
+            <label class="form-check-label" for="remember">로그인 상태 유지</label>
+          </div>
+          <div>
+            <router-link to="/forgot-password" class="text-decoration-none">비밀번호 찾기</router-link>
+          </div>
+        </div>
+        
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary" :disabled="isLoading">
+            <span v-if="isLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            {{ isLoading ? '로그인 중...' : '로그인' }}
+          </button>
+          <button type="button" class="btn btn-outline-secondary" @click="redirectToRegister">회원가입</button>
+        </div>
+        
+        <div class="mt-4">
+          <div class="divider">
+            <span>또는</span>
+          </div>
+          <div class="d-flex justify-content-center gap-3 mt-3">
+            <button type="button" class="btn btn-outline-dark" @click="socialLogin('google')">
+              Google
+            </button>
+            <button type="button" class="btn btn-outline-primary" @click="socialLogin('facebook')">
+              Facebook
+            </button>
+            <button type="button" class="btn btn-outline-success" @click="socialLogin('naver')">
+              Naver
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'LoginPage',
+  data() {
+    return {
+      username: '',
+      password: '',
+      rememberMe: false,
+      showPassword: false,
+      isLoading: false,
+      message: '',
+      isError: false,
+      validationErrors: {}
+    }
+  },
+  methods: {
+    validateForm() {
+      this.validationErrors = {};
+      let isValid = true;
+      
+      if (!this.username.trim()) {
+        this.validationErrors.username = '아이디를 입력해주세요';
+        isValid = false;
+      }
+      
+      if (!this.password) {
+        this.validationErrors.password = '비밀번호를 입력해주세요';
+        isValid = false;
+      } else if (this.password.length < 6) {
+        this.validationErrors.password = '비밀번호는 최소 6자 이상이어야 합니다';
+        isValid = false;
+      }
+      
+      return isValid;
+    },
+    
+    handleLogin() {
+      if (!this.validateForm()) {
+        return;
+      }
+      
+      this.isLoading = true;
+      this.message = '';
+      
+      // API 호출을 시뮬레이션합니다.
+      // 실제 상황에서는 axios나 fetch를 사용하여 API 호출을 수행합니다.
+      setTimeout(() => {
+        if (this.username === 'admin' && this.password === 'password') {
+          this.message = '로그인 성공! 리디렉션 중...';
+          this.isError = false;
+          
+          // 로그인 성공 후 로컬 스토리지에 사용자 정보 저장 (예시)
+          if (this.rememberMe) {
+            localStorage.setItem('user', JSON.stringify({
+              username: this.username,
+              token: 'sample-jwt-token'
+            }));
+          }
+          
+          // 메인 페이지로 리디렉션 (예시)
+          setTimeout(() => {
+            this.$router.push('/dashboard');
+          }, 1500);
+        } else {
+          this.message = '아이디 또는 비밀번호가 올바르지 않습니다.';
+          this.isError = true;
+        }
+        this.isLoading = false;
+      }, 1500);
+    },
+    
+    redirectToRegister() {
+      // 회원가입 페이지로 이동
+      this.$router.push('/register');
+    },
+    
+    socialLogin(provider) {
+      console.log(`${provider} 로그인 시도`);
+      // 실제 소셜 로그인 구현
+      // OAuth 플로우 시작
+    }
+  }
+}
+</script>
+
+<style scoped>
+.login-container {
+  max-width: 25rem;
+  margin: 6.25rem auto;
+  padding: 2rem;
+  border-radius: 0.7rem;
+  box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1);
+  background-color: #f8f9fa; /* 배경색 추가 - 연한 회색 */
+}
+
+.login-logo {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.login-logo img {
+  height: 8rem;
+  width: 8rem;
+  border-radius: 50%; /* 원형으로 만들기 */
+  object-fit: cover; /* 이미지 비율 유지하면서 영역 채우기 */
+  border: 1px solid #dee2e6; /* 선택적: 테두리 추가 */
+}
+
+
+.form-group {
+  margin-bottom: 0.9375rem;
+}
+
+.alert {
+  margin-top: 1.25rem;
+}
+
+/* 추가된 가로선 & 또는 스타일 */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.divider span {
+  padding: 0 1rem;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+</style>
