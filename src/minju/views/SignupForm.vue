@@ -1,46 +1,48 @@
-<script>
+<script setup>
+import "../PurpleTone.css";
+
 import { ref } from "vue";
-import "../PurpleTone.css"; // CSS 파일 직접 가져오기
+import { useRouter } from "vue-router";
+import axios from "axios";
 
-export default {
-  name: "SignupForm",
-  emits: ["changeView"],
-  setup(props, { emit }) {
-    // 회원가입 데이터
-    const registerData = ref({
-      userId: "",
-      name: "",
-      nickname: "",
-      password: "",
-      phone: "",
-    });
+const router = useRouter();
 
-    // 회원가입 처리 함수
-    const handleRegister = async () => {
-      try {
-        // API 호출 대신 콘솔에 출력 (실제 구현 시 API 호출로 변경 필요)
-        console.log("회원가입 요청:", registerData.value);
+// 회원가입 데이터
+const registerData = ref({
+  userId: "",
+  userName: "",
+  nickname: "",
+  password: "",
+  phoneNumber: "",
+});
 
-        // 실제 API 호출 예시
-        // const response = await registerUser(registerData.value);
-        // if (response.success) {
-        //   // 회원가입 성공 처리
-        //   emit('changeView', 'login');
-        // }
+// 회원가입 : 회원 추가
+const handleRegister = async () => {
+  const requestBody = {
+    //ref 객체(registerData) 안의 속성에 접근해야 함
+    userId: registerData.value.userId,
+    userName: registerData.value.userName,
+    nickname: registerData.value.nickname,
+    password: registerData.value.password,
+    phoneNumber: registerData.value.phoneNumber,
+  };
 
-        alert("회원가입 요청이 전송되었습니다.");
-        emit("changeView", "login");
-      } catch (error) {
-        console.error("회원가입 에러:", error);
-        alert("회원가입 중 오류가 발생했습니다.");
-      }
-    };
+  try {
+    const response = await axios.post("/api/users", requestBody);
 
-    return {
-      registerData,
-      handleRegister,
-    };
-  },
+    if (response.status == 201) {
+      console.log("회원가입 성공", response.data);
+      router.push("/minju");
+    }
+  } catch (error) {
+    console.error("회원가입 실패: ", error.response?.data || error.message);
+    alert("회원가입에 실패했습니다. 다시 시도해주세요.");
+  }
+};
+
+//홈으로 돌아가기
+const goHome = () => {
+  router.push("/minju");
 };
 </script>
 
@@ -60,7 +62,7 @@ export default {
       <input
         type="text"
         id="name"
-        v-model="registerData.name"
+        v-model="registerData.userName"
         placeholder="이름을 입력하세요"
       />
     </div>
@@ -87,15 +89,13 @@ export default {
       <input
         type="tel"
         id="phone"
-        v-model="registerData.phone"
+        v-model="registerData.phoneNumber"
         placeholder="전화번호를 입력하세요"
       />
     </div>
     <div class="form-buttons">
       <button class="btn-primary" @click="handleRegister">회원가입</button>
-      <button class="btn-secondary" @click="$emit('changeView', 'login')">
-        돌아가기
-      </button>
+      <button class="btn-secondary" @click="goHome">돌아가기</button>
     </div>
   </div>
 </template>

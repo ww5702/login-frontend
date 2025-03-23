@@ -12,7 +12,6 @@ export default {
       password: "",
     });
 
-    // 로그인 처리 함수 (폼이 아닌 함수 방식으로 데이터 처리)
     const handleLogin = async () => {
       try {
         // API 호출 대신 콘솔에 출력 (실제 구현 시 API 호출로 변경 필요)
