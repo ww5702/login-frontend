@@ -20,16 +20,20 @@ const validationErrors = reactive({})
 // 폼 유효성 검사
 const validateForm = () => {
   Object.keys(validationErrors).forEach(key => delete validationErrors[key])
-  let isValid = true
+  let isValid = true // 폼이 유효하다고 가정하고 시작 
 
+  // 사용자가 아이디를 입력하지 않거나, 공백이라면 
   if (!username.value.trim()) {
     validationErrors.username = '아이디를 입력해주세요'
     isValid = false
   }
 
+  // 사용자가 비밀번호를 입력하지 않았거나, 공백이라면 
   if (!password.value) {
     validationErrors.password = '비밀번호를 입력해주세요'
     isValid = false
+
+    // 사용자가 비밀번호를 8자 미만으로 쳤다면 
   } else if (password.value.length < 8) {
     validationErrors.password = '비밀번호는 최소 8자 이상이어야 합니다'
     isValid = false
@@ -40,9 +44,10 @@ const validateForm = () => {
 
 // 로그인 처리
 const handleLogin = async (event) => {
-  // 혹시 모를 기본 폼 제출 방지를 위해 event.preventDefault() 명시적 호출
+
+  // 폼이 제출될 때 새로고침 방지 
   if (event) event.preventDefault();
-  
+
   if (!validateForm()) {
     return // 유효성 검사 실패하면 즉시 종료 
   }
@@ -62,7 +67,8 @@ const handleLogin = async (event) => {
 
     // 로그인 성공 처리
     if (response.status === 200 || response.status === 201) {
-      message.value = '로그인 성공! 리디렉션 중...'
+      // message.value = '로그인 성공! 리디렉션 중...'
+      message.value = "로그인 성공!"
       isError.value = false
 
       // 로그인 성공 후 로컬 스토리지에 사용자 정보 저장 (예시)
@@ -77,7 +83,7 @@ const handleLogin = async (event) => {
       // setTimeout(() => {
       //   router.push('/dashboard')
       // }, 1500)
-      
+
     } else {
       message.value = '아이디 또는 비밀번호가 올바르지 않습니다.'
       isError.value = true
@@ -160,7 +166,7 @@ const socialLogin = (provider) => {
               aria-hidden="true"></span>
             {{ isLoading ? '로그인 중...' : '로그인' }}
           </button>
-          <button type="button" class="btn btn-outline-secondary" @click="redirectToRegister">회원가입</button>
+          <button type="button" class="btn btn-outline-primary" @click="redirectToRegister">회원가입</button>
         </div>
 
         <div class="mt-4">
@@ -171,8 +177,11 @@ const socialLogin = (provider) => {
             <button type="button" class="btn btn-outline-dark" @click="socialLogin('google')">
               Google
             </button>
-            <button type="button" class="btn btn-outline-primary" @click="socialLogin('facebook')">
+            <button type="button" class="btn btn-outline-info" @click="socialLogin('Facebook')">
               Facebook
+            </button>
+            <button type="button" class="btn btn-outline-warning" @click="socialLogin('Kakao')">
+              Kakao
             </button>
             <button type="button" class="btn btn-outline-success" @click="socialLogin('naver')">
               Naver
@@ -249,5 +258,9 @@ const socialLogin = (provider) => {
   padding: 0 1rem;
   color: #6c757d;
   font-size: 0.9rem;
+}
+
+.btn-primary:hover {
+  transform: translateX(0);
 }
 </style>

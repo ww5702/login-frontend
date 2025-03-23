@@ -13,9 +13,10 @@ import MinjuLogin from "../minju/views/LoginForm.vue";
 import MinjuSignup from "../minju/views/SignupForm.vue";
 import MinjuFindPassword from "../minju/views/PasswordRecoveryForm.vue";
 import JiyeongLogin from "../jiyeong/views/Login.vue";
+import JYSignUp from "../jiyeong/views/JYSignUp.vue";
 import HyojeongLogin from "../hyojeong/views/Login.vue";
-import LoginSuccess from "../hyojeong/views/Success.vue";
 import Success from "../hyojeong/views/Success.vue";
+
 
 const routes = [
   { path: "/", component: Home },
@@ -40,6 +41,7 @@ const routes = [
 
   // 지영이
   { path: "/jiyeong", component: JiyeongLogin },
+  { path: "/jiyeong/signup", component: JYSignUp },
 
   // 효정이
   { path: "/hyojeong", component: HyojeongLogin },
