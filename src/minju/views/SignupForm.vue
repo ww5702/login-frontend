@@ -16,8 +16,47 @@ const registerData = ref({
   phoneNumber: "",
 });
 
+//회원가입 데이터 입력 필드 유효성 검사
+const checkEmptyField = (registerData) => {
+  return (
+    !registerData.value.userId ||
+    !registerData.value.userName ||
+    !registerData.value.nickname ||
+    !registerData.value.password ||
+    !registerData.value.phoneNumber
+  );
+};
+
+// 비밀번호 복잡도 검사
+const isValidPassword = (password) => {
+  const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=-]).{8,}$/;
+  return regex.test(password);
+};
+
+// 전화번호 유효성 검사
+const isValidPhoneNumber = (phoneNumber) => {
+  const regex = /^010\d{8}$/;
+  return regex.test(phoneNumber);
+};
+
 // 회원가입 : 회원 추가
-const handleRegister = async () => {
+const handleSignup = async () => {
+  //회원가입 데이터 유효성 검사
+  if (checkEmptyField(registerData)) {
+    alert("모든 필드를 입력해 주세요.");
+    return;
+  }
+
+  if (!isValidPassword(registerData.value.password)) {
+    alert("비밀번호는 8자 이상, 영문/숫자/특수문자를 포함해야 합니다.");
+    return;
+  }
+
+  if (!isValidPhoneNumber(registerData.value.phoneNumber)) {
+    alert("핸드폰 번호는 하이픈(-)없이 11자리 숫자로 입력해 주세요.");
+    return;
+  }
+
   const requestBody = {
     //ref 객체(registerData) 안의 속성에 접근해야 함
     userId: registerData.value.userId,
@@ -94,7 +133,7 @@ const goHome = () => {
       />
     </div>
     <div class="form-buttons">
-      <button class="btn-primary" @click="handleRegister">회원가입</button>
+      <button class="btn-primary" @click="handleSignup">회원가입</button>
       <button class="btn-secondary" @click="goHome">돌아가기</button>
     </div>
   </div>
