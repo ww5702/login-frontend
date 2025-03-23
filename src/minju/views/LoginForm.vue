@@ -1,35 +1,3 @@
-<template>
-  <div class="form-content">
-    <div class="form-group">
-      <label for="userId">아이디</label>
-      <input
-        type="text"
-        id="userId"
-        v-model="loginData.userId"
-        placeholder="아이디를 입력하세요"
-      />
-    </div>
-    <div class="form-group">
-      <label for="password">비밀번호</label>
-      <input
-        type="password"
-        id="password"
-        v-model="loginData.password"
-        placeholder="비밀번호를 입력하세요"
-      />
-    </div>
-    <div class="form-buttons">
-      <button class="btn-primary" @click="handleLogin">로그인</button>
-    </div>
-    <div class="form-links">
-      <a href="#" @click.prevent="$emit('changeView', 'signup')">회원가입</a>
-      <a href="#" @click.prevent="$emit('changeView', 'recovery')"
-        >비밀번호 찾기</a
-      >
-    </div>
-  </div>
-</template>
-
 <script>
 import "../PurpleTone.css";
 import { ref } from "vue";
@@ -70,3 +38,35 @@ export default {
   },
 };
 </script>
+
+<template>
+  <div class="form-content">
+    <div class="form-group">
+      <label for="userId">아이디</label>
+      <input
+        type="text"
+        id="userId"
+        v-model="loginData.userId"
+        placeholder="아이디를 입력하세요"
+      />
+    </div>
+    <div class="form-group">
+      <label for="password">비밀번호</label>
+      <input
+        type="password"
+        id="password"
+        v-model="loginData.password"
+        placeholder="비밀번호를 입력하세요"
+      />
+    </div>
+    <div class="form-buttons">
+      <button class="btn-primary" @click="handleLogin">로그인</button>
+    </div>
+    <div class="form-links">
+      <a href="#" @click.prevent="$emit('changeView', 'signup')">회원가입</a>
+      <a href="#" @click.prevent="$emit('changeView', 'recovery')"
+        >비밀번호 찾기</a
+      >
+    </div>
+  </div>
+</template>

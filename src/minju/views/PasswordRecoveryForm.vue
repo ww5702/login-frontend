@@ -1,10 +1,3 @@
-<template>
-  <div class="space-y-4">
-    <input v-model="email" type="email" placeholder="이메일" class="input" />
-    <button @click="recover" class="btn">인증하기</button>
-  </div>
-</template>
-
 <script setup>
 import "../PurpleTone.css";
 import { ref } from "vue";
@@ -25,3 +18,10 @@ defineEmits(["submitData"]);
   @apply w-full p-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600;
 }
 </style>
+
+<template>
+  <div class="space-y-4">
+    <input v-model="email" type="email" placeholder="이메일" class="input" />
+    <button @click="recover" class="btn">인증하기</button>
+  </div>
+</template>
