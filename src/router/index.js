@@ -4,8 +4,9 @@ import Home from "../views/Home.vue";
 import DaeunLogin from "../daeun/views/Login.vue";
 import JaeungLogin from "../jaeung/views/Login.vue";
 import SilLogin from "../sil/views/Login.vue";
-import MinjuLogin from "../minju/views/Login.vue";
-import MinjuRegister from "../minju/views/Register.vue";
+import MinjuLogin from "../minju/views/LoginForm.vue";
+import MinjuSignup from "../minju/views/SignupForm.vue";
+import MinjuFindPassword from "../minju/views/PasswordRecoveryForm.vue";
 import JiyeongLogin from "../jiyeong/views/Login.vue";
 import HyojeongLogin from "../hyojeong/views/Login.vue";
 
@@ -23,7 +24,8 @@ const routes = [
 
   // 민주
   { path: "/minju", component: MinjuLogin },
-  { path: "/minju/register", component: MinjuRegister },
+  { path: "/minju/signup", component: MinjuSignup },
+  { path: "/minju/password", component: MinjuFindPassword },
 
   // 지영이
   { path: "/jiyeong", component: JiyeongLogin },
