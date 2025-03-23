@@ -123,8 +123,6 @@ const handleRegister = async () => {
 }
 
 
-
-
 // 로그인 페이지로 이동
 const redirectToLogin = () => {
     router.push('/jiyeong')
@@ -149,11 +147,16 @@ const redirectToLogin = () => {
             <form @submit.prevent="handleRegister">
                 <div class="form-group">
                     <label for="userId" class="form-label">아이디</label>
-                    <input type="text" class="form-control" id="userId" v-model="userId" placeholder="아이디를 입력하세요"
-                        :class="{ 'is-invalid': validationErrors.userId }" required>
-                    <div class="invalid-feedback" v-if="validationErrors.userId">
-                        {{ validationErrors.userId }}
+
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="userId" v-model="userId" placeholder="아이디를 입력하세요"
+                            :class="{ 'is-invalid': validationErrors.userId }" required>
+                        <button class="btn btn-sm btn-outline-secondary" type="button" @click="checkUserIdAvailability">중복 확인</button>
+                        <div class="invalid-feedback" v-if="validationErrors.userId">
+                            {{ validationErrors.userId }}
+                        </div>
                     </div>
+
                 </div>
 
                 <div class="form-group">
@@ -217,22 +220,20 @@ const redirectToLogin = () => {
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="termsAgreed" v-model="termsAgreed"
-                            :class="{ 'is-invalid': validationErrors.termsAgreed }">
-                        <label class="form-check-label" for="termsAgreed">
-                            이용약관 및 개인정보 처리방침에 동의합니다.
-                        </label>
-                        <div class="invalid-feedback" v-if="validationErrors.termsAgreed">
-                            {{ validationErrors.termsAgreed }}
-                        </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="termsAgreed" v-model="termsAgreed"
+                        :class="{ 'is-invalid': validationErrors.termsAgreed }">
+                    <label class="form-check-label" for="termsAgreed">
+                        이용약관 및 개인정보 처리방침에 동의합니다.
+                    </label>
+                    <div class="invalid-feedback" v-if="validationErrors.termsAgreed">
+                        {{ validationErrors.termsAgreed }}
                     </div>
                 </div>
 
-                <div class="mt-3 text-center">
+                <!-- <div class="mt-3 text-center">
                     <a href="#" class="text-decoration-none">약관 보기</a>
-                </div>
+                </div> -->
 
                 <div class="d-grid gap-2 mt-4">
                     <button type="submit" class="btn btn-primary" :disabled="isLoading">
@@ -240,7 +241,7 @@ const redirectToLogin = () => {
                             aria-hidden="true"></span>
                         {{ isLoading ? '처리 중...' : '회원가입' }}
                     </button>
-                    <button type="button" class="btn btn-outline-secondary" @click="redirectToLogin">로그인 페이지로
+                    <button type="button" class="btn btn-outline-primary" @click="redirectToLogin">로그인 페이지로
                         돌아가기</button>
                 </div>
             </form>
@@ -286,4 +287,8 @@ const redirectToLogin = () => {
     margin-top: 1.25rem;
 }
 
+.btn-primary:hover {
+    transform: translateX(0);
+    ;
+}
 </style>
