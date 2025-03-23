@@ -3,6 +3,9 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import DaeunLogin from "../daeun/views/Login.vue";
 import JaeungLogin from "../jaeung/views/Login.vue";
+import JaeUngSingUpPage from '../jaeung/views/SignUpPage.vue';
+import JaeungHomePage from '../jaeung/views/HomePage.vue';
+
 import SilLogin from "../sil/views/Login.vue";
 import MinjuLogin from "../minju/views/LoginForm.vue";
 import MinjuSignup from "../minju/views/SignupForm.vue";
@@ -18,6 +21,8 @@ const routes = [
 
   // 재웅오빠
   { path: "/jaeung", component: JaeungLogin },
+  { path: '/jaeung/signup', component: JaeUngSingUpPage },
+  { path: '/jaeung/home', component: JaeungHomePage },
 
   // 실언니
   { path: "/sil", component: SilLogin },
