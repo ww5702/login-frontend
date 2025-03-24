@@ -9,7 +9,7 @@ import axios from "axios";
 
 const router = useRouter();
 
-// 회원가입 실패시 모달 출력 여부
+// 500에러시 모달 출력 여부
 const showError = ref(false);
 
 // 회원가입 데이터
@@ -106,7 +106,7 @@ const handleSignup = async () => {
   }
 };
 
-// 회원가입 실패 모달 닫기
+// 500 에러 모달 닫기
 const closeError = () => {
   showError.value = false;
 };
@@ -119,6 +119,7 @@ const goHome = () => {
 
 <template>
   <div class="form-content">
+    <!-- 500 에러 모달 -->
     <ErrorHandle :is-visible="showError" @close="closeError" />
     <div class="form-group">
       <label for="regUserId">아이디</label>

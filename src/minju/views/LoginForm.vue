@@ -1,12 +1,16 @@
 <script setup>
 import "../css/PurpleTone.css";
 import "../css/ValidateForm.css";
+import ErrorHandle from "../components/ErrorHandle.vue";
 
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 
 const router = useRouter();
+
+// 500 에러시 모달 출력 여부
+const showError = ref(false);
 
 // 로그인 데이터
 const loginData = ref({
@@ -75,10 +79,15 @@ const handleLogin = async () => {
 
     if (error.response.status == 500) {
       console.error("로그인 실패: ", error.response?.data || error.message);
-      alert("서버 에러입니다.");
+      showError.value = true;
       return;
     }
   }
+};
+
+// 500 에러 모달 닫기
+const closeError = () => {
+  showError.value = false;
 };
 
 const goSignup = () => {
@@ -92,6 +101,8 @@ const goFindPassword = () => {
 
 <template>
   <div class="form-content">
+    <!-- 500 에러 모달 -->
+    <ErrorHandle :is-visible="showError" @close="closeError" />
     <div class="form-group">
       <label for="userId">아이디</label>
       <input
