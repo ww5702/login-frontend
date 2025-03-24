@@ -1,0 +1,36 @@
+.form-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.input-error {
+  border: 2px solid #ff4444;
+  background-color: #fff8f8;
+  transition: all 0.3s ease;
+}
+
+.input-error:hover {
+  border-color: #ff0000;
+  box-shadow: 0 0 5px rgba(255, 0, 0, 0.2);
+}
+
+.error-message {
+  color: #ff4444;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.2);
+}

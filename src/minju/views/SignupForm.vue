@@ -1,20 +1,12 @@
 <script setup>
 import "../PurpleTone.css";
+import "../css/ValidateForm.css";
 
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 
 const router = useRouter();
-
-// 회원가입 필드의 오류 여부 저장
-const fieldErrors = ref({
-  userId: false,
-  userName: false,
-  nickname: false,
-  password: false,
-  phoneNumber: false,
-});
 
 // 회원가입 데이터
 const registerData = ref({
@@ -23,6 +15,15 @@ const registerData = ref({
   nickname: "",
   password: "",
   phoneNumber: "",
+});
+
+// 회원가입 필드의 오류 여부 저장
+const fieldErrors = ref({
+  userId: false,
+  userName: false,
+  nickname: false,
+  password: false,
+  phoneNumber: false,
 });
 
 //회원가입 데이터 입력 필드 유효성 검사
@@ -37,14 +38,6 @@ const checkEmptyField = (registerData) => {
   }
   if (!registerData.value.nickname) {
     fieldErrors.value.nickname = true;
-    return false;
-  }
-  if (!registerData.value.password) {
-    fieldErrors.value.password = true;
-    return false;
-  }
-  if (!registerData.value.phoneNumber) {
-    fieldErrors.value.phoneNumber = true;
     return false;
   }
   return true;
@@ -71,18 +64,15 @@ const handleSignup = async () => {
 
   //회원가입 데이터 유효성 검사
   if (!checkEmptyField(registerData)) {
-    alert("모든 필드를 입력해 주세요.");
     return;
   }
 
   if (!isValidPassword(registerData.value.password)) {
-    alert("비밀번호는 8자 이상, 영문/숫자/특수문자를 포함해야 합니다.");
     fieldErrors.value.password = true;
     return;
   }
 
   if (!isValidPhoneNumber(registerData.value.phoneNumber)) {
-    alert("핸드폰 번호는 하이픈(-)없이 11자리 숫자로 입력해 주세요.");
     fieldErrors.value.phoneNumber = true;
     return;
   }
@@ -182,7 +172,7 @@ const goHome = () => {
         placeholder="전화번호를 입력하세요"
       />
       <span v-if="fieldErrors.phoneNumber" class="error-message"
-        >올바른 전화번호 형식이 아닙니다</span
+        >핸드폰 번호는 하이픈(-)없이 11자리 숫자로 입력해 주세요.</span
       >
     </div>
     <div class="form-buttons">
@@ -191,42 +181,3 @@ const goHome = () => {
     </div>
   </div>
 </template>
-
-<style>
-.form-group {
-  position: relative;
-  margin-bottom: 1rem;
-}
-
-.input-error {
-  border: 2px solid #ff4444;
-  background-color: #fff8f8;
-  transition: all 0.3s ease;
-}
-
-.input-error:hover {
-  border-color: #ff0000;
-  box-shadow: 0 0 5px rgba(255, 0, 0, 0.2);
-}
-
-.error-message {
-  color: #ff4444;
-  font-size: 0.8rem;
-  margin-top: 0.25rem;
-  display: block;
-}
-
-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-}
-
-input:focus {
-  outline: none;
-  border-color: #4a90e2;
-  box-shadow: 0 0 5px rgba(74, 144, 226, 0.2);
-}
-</style>
