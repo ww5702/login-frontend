@@ -1,5 +1,5 @@
 <script setup>
-import "../PurpleTone.css";
+import "../css/PurpleTone.css";
 import "../css/ValidateForm.css";
 
 import { ref } from "vue";

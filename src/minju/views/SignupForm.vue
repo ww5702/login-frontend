@@ -1,12 +1,16 @@
 <script setup>
-import "../PurpleTone.css";
+import "../css/PurpleTone.css";
 import "../css/ValidateForm.css";
+import ErrorHandle from "../components/ErrorHandle.vue";
 
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 
 const router = useRouter();
+
+// 회원가입 실패시 모달 출력 여부
+const showError = ref(false);
 
 // 회원가입 데이터
 const registerData = ref({
@@ -97,9 +101,14 @@ const handleSignup = async () => {
     console.log(error);
     if (error.response.status == 500) {
       console.error("회원가입 실패: ", error.response?.data || error.message);
-      alert("회원가입에 실패했습니다. 다시 시도해주세요.");
+      showError.value = true;
     }
   }
+};
+
+// 회원가입 실패 모달 닫기
+const closeError = () => {
+  showError.value = false;
 };
 
 //홈으로 돌아가기
@@ -110,6 +119,7 @@ const goHome = () => {
 
 <template>
   <div class="form-content">
+    <ErrorHandle :is-visible="showError" @close="closeError" />
     <div class="form-group">
       <label for="regUserId">아이디</label>
       <input
