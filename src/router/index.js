@@ -2,6 +2,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import DaeunLogin from "../daeun/views/Login.vue";
+import DaeunSignup from "../daeun/views/Signup.vue";
 import JaeungLogin from "../jaeung/views/Login.vue";
 import SilLogin from "../sil/views/Login.vue";
 import MinjuLogin from "../minju/views/LoginForm.vue";
@@ -15,6 +16,7 @@ const routes = [
 
   // 다은언니
   { path: "/daeun", component: DaeunLogin },
+  { path: "/daeun/signup", component: DaeunSignup },
 
   // 재웅오빠
   { path: "/jaeung", component: JaeungLogin },
