@@ -30,7 +30,7 @@
   import { useRouter } from 'vue-router'
   const router = useRouter()
   
-  const users = ['김다은', '이재웅', '진실', '김민주', '이효정', '손지영']
+  const users = ['DB공듀', '코드학대범', '성장괴물', '기존쎄갑', '마조리카', '이구역통제왕']
   const selectedIndex = ref(null)
   
   const pickRandom = () => {
