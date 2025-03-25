@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from "axios";
 
@@ -21,6 +21,83 @@ const message = ref('')
 const isError = ref(false)
 const validationErrors = reactive({})
 
+// 추가 
+const isCheckingUserId = ref(false)
+const userIdChecked = ref(false)
+const userIdAvailable = ref(false)
+const userInvaild = ref(false)
+
+
+// 중복 확인 처리 
+
+const checkUserIdAvailability = async () => {
+    // 입력값 검사
+    if (!userId.value.trim()) {
+        validationErrors.userId = '아이디를 입력해주세요'
+        return
+    }
+
+    isCheckingUserId.value = true
+    userIdChecked.value = false
+    userIdAvailable.value = false
+    userInvaild.value = false
+
+    try {
+        // 아이디 중복 확인을 위한
+        // Get 요청으로 특정 사용자 정보를 요청하여 존재 여부 확인
+        const response = await axios.get(`/api/users/${userId.value}`)
+        console.log(response)
+
+        // 해당 아이디가 이미 존재하는 경우 (200 응답)
+        userIdAvailable.value = false
+        // message.value = '이미 사용 중인 아이디입니다.'
+        userInvaild.value = true
+    } catch (error) {
+        // 404 에러는 해당 ID가 없다는 의미로 사용 
+
+        userIdAvailable.value = true
+        userIdChecked.value = true
+        // message.value = '사용 가능한 아이디입니다.'
+        // isError.value = false
+        // delete validationErrors.userId
+
+
+        // if (error.response && error.response.status === 404) {
+        //     userIdAvailable.value = true
+        //     userIdChecked.value = true
+        //     message.value = '사용 가능한 아이디입니다.'
+        //     isError.value = false
+        //     // 유효성 검사 에러 제거
+        //     // delete validationErrors.userId
+
+        // } else {
+        //     // 기타 서버 오류
+        //     message.value = '서버 오류가 발생했습니다. 나중에 다시 시도해주세요.'
+        //     isError.value = true
+        // }
+
+    } finally {
+        isCheckingUserId.value = false
+    }
+}
+
+// 아이디 입력값이 변경되었을 때 checked 상태 리셋
+const resetUserIdCheck = () => {
+    userIdChecked.value = false
+    userIdAvailable.value = false
+    userInvaild.value = false
+    message.value = '' // 기존 메시지를 지우려면 주석 해제
+}
+
+// userId의 값이 변경될 때마다 중복 체크 상태를 리셋
+watch(userId, () => {
+    resetUserIdCheck()
+})
+
+
+
+
+
 // 폼 유효성 검사
 const validateForm = () => {
     Object.keys(validationErrors).forEach(key => delete validationErrors[key])
@@ -28,6 +105,12 @@ const validateForm = () => {
 
     if (!userId.value.trim()) {
         validationErrors.userId = '아이디를 입력해주세요'
+        isValid = false
+    } else if (!userIdChecked.value) {
+        validationErrors.userId = '아이디 중복 확인이 필요합니다'
+        isValid = false
+    } else if (!userIdAvailable.value) {
+        validationErrors.userId = '사용할 수 없는 아이디입니다'
         isValid = false
     }
 
@@ -72,6 +155,7 @@ const validateForm = () => {
 
     return isValid
 }
+
 
 // 회원가입 처리
 const handleRegister = async () => {
@@ -150,13 +234,31 @@ const redirectToLogin = () => {
 
                     <div class="input-group">
                         <input type="text" class="form-control" id="userId" v-model="userId" placeholder="아이디를 입력하세요"
-                            :class="{ 'is-invalid': validationErrors.userId }" required>
-                        <button class="btn btn-sm btn-outline-secondary" type="button" @click="checkUserIdAvailability">중복 확인</button>
+                            :class="{
+                                'is-invalid': validationErrors.userId || userInvaild,
+                                'is-valid': userIdChecked && userIdAvailable
+                            }" @input="resetUserIdCheck" required>
+                        <button class="btn btn-sm btn-outline-secondary" type="button" @click="checkUserIdAvailability"
+                            :disabled="isCheckingUserId || !userId.trim()">
+                            <span v-if="isCheckingUserId" class="spinner-border spinner-border-sm" role="status"
+                                aria-hidden="true"></span>
+                            {{ isCheckingUserId ? '확인 중...' : '중복 확인' }}
+                        </button>
+
                         <div class="invalid-feedback" v-if="validationErrors.userId">
                             {{ validationErrors.userId }}
                         </div>
-                    </div>
 
+                        <div class="valid-feedback" v-if="userIdAvailable">
+                            사용 가능한 아이디입니다.
+                        </div>
+
+                        <div class="invalid-feedback" v-if="userInvaild">
+                            이미 사용 중인 아이디입니다.
+                        </div>
+
+
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -291,4 +393,13 @@ const redirectToLogin = () => {
     transform: translateX(0);
     ;
 }
+
+
+/* input-group 내의 버튼 스타일 수정 */
+.input-group .btn {
+    border-top-right-radius: 0.375rem !important;
+    border-bottom-right-radius: 0.375rem !important;
+    z-index: 5;
+}
+
 </style>
