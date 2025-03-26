@@ -29,7 +29,6 @@ const userInvaild = ref(false)
 
 
 // 중복 확인 처리 
-
 const checkUserIdAvailability = async () => {
     // 입력값 검사
     if (!userId.value.trim()) {
@@ -41,6 +40,8 @@ const checkUserIdAvailability = async () => {
     userIdChecked.value = false
     userIdAvailable.value = false
     userInvaild.value = false
+    // 기존 유효성 검사 메시지 초기화
+    delete validationErrors.userId
 
     try {
         // 아이디 중복 확인을 위한
@@ -50,36 +51,21 @@ const checkUserIdAvailability = async () => {
 
         // 해당 아이디가 이미 존재하는 경우 (200 응답)
         userIdAvailable.value = false
-        // message.value = '이미 사용 중인 아이디입니다.'
         userInvaild.value = true
+        userIdChecked.value = true
+        // 즉시 피드백을 위해 validationErrors 설정
+        validationErrors.userId = '이미 사용 중인 아이디입니다'
     } catch (error) {
         // 404 에러는 해당 ID가 없다는 의미로 사용 
-
         userIdAvailable.value = true
         userIdChecked.value = true
-        // message.value = '사용 가능한 아이디입니다.'
-        // isError.value = false
-        // delete validationErrors.userId
-
-
-        // if (error.response && error.response.status === 404) {
-        //     userIdAvailable.value = true
-        //     userIdChecked.value = true
-        //     message.value = '사용 가능한 아이디입니다.'
-        //     isError.value = false
-        //     // 유효성 검사 에러 제거
-        //     // delete validationErrors.userId
-
-        // } else {
-        //     // 기타 서버 오류
-        //     message.value = '서버 오류가 발생했습니다. 나중에 다시 시도해주세요.'
-        //     isError.value = true
-        // }
-
+        // 성공 시 validationErrors 초기화
+        delete validationErrors.userId
     } finally {
         isCheckingUserId.value = false
     }
 }
+
 
 // 아이디 입력값이 변경되었을 때 checked 상태 리셋
 const resetUserIdCheck = () => {
@@ -103,8 +89,12 @@ const validateForm = () => {
     Object.keys(validationErrors).forEach(key => delete validationErrors[key])
     let isValid = true
 
+
     if (!userId.value.trim()) {
         validationErrors.userId = '아이디를 입력해주세요'
+        isValid = false
+    } else if (userInvaild.value) {
+        validationErrors.userId = '이미 사용 중인 아이디입니다'
         isValid = false
     } else if (!userIdChecked.value) {
         validationErrors.userId = '아이디 중복 확인이 필요합니다'
@@ -235,7 +225,7 @@ const redirectToLogin = () => {
                     <div class="input-group">
                         <input type="text" class="form-control" id="userId" v-model="userId" placeholder="아이디를 입력하세요"
                             :class="{
-                                'is-invalid': validationErrors.userId || userInvaild,
+                                'is-invalid': validationErrors.userId,
                                 'is-valid': userIdChecked && userIdAvailable
                             }" @input="resetUserIdCheck" required>
                         <button class="btn btn-sm btn-outline-secondary" type="button" @click="checkUserIdAvailability"
@@ -249,16 +239,12 @@ const redirectToLogin = () => {
                             {{ validationErrors.userId }}
                         </div>
 
-                        <div class="valid-feedback" v-if="userIdAvailable">
+                        <div class="valid-feedback" v-if="userIdAvailable && userIdChecked">
                             사용 가능한 아이디입니다.
                         </div>
-
-                        <div class="invalid-feedback" v-if="userInvaild">
-                            이미 사용 중인 아이디입니다.
-                        </div>
-
-
                     </div>
+
+
                 </div>
 
                 <div class="form-group">
@@ -401,5 +387,4 @@ const redirectToLogin = () => {
     border-bottom-right-radius: 0.375rem !important;
     z-index: 5;
 }
-
 </style>
