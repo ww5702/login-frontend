@@ -15,14 +15,14 @@ const isUser = ref(false)
 const checkLogin = ref(false)
 
 const signin = async() => {
-  const url = '/api/users/login'
+  const url = '/api/users/login' // 주소 정의
   const requestBody = {
     userId: userId.value,
     password: userPw.value      
   }
   try {
     const response = await Axios.post(url, requestBody)
-    isUser.value = response.data
+    isUser.value = response.data //true or false
     if (isUser.value) {
       alert('로그인 성공 !')
       router.push('/hyojeong/success')
